@@ -1,0 +1,41 @@
+{
+  "name": "shoporama-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Binaer-Web/shoporama-boilerplate.git"
+  },
+  "author": "Binaer.dk",
+  "license": "ISC",
+  "homepage": "https://github.com/Binaer-Web/shoporama-boilerplate",
+  "browserslist": "> 0.25%, not dead",
+  "scripts": {
+    "build": "gulp",
+    "start": "gulp start",
+    "live": "gulp live",
+    "deploy": "gulp deploy"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "core-js": "^3.8.2",
+    "gulp-changed": "^4.0.2",
+    "gulp-sftp": "git+https://git@github.com/webksde/gulp-sftp",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-strip-comments": "^2.5.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-util": "^3.0.8",
+    "gulp-watch": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-less": "^4.0.1",
+    "gulp-svg-sprite": "^1.5.0"
+  }
+}

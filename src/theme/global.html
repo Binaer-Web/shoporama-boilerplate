@@ -1,0 +1,59 @@
+<{strip}>
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8">
+
+		<{include file="_partial.tracking-top.html"}>
+
+		<title><{if $meta_title}><{$meta_title|escape}><{elseif $smarty.capture.title}><{$smarty.capture.title|escape}><{else}><{$webshop->getName()|escape}><{/if}></title>
+
+		<{if $noindex}>
+			<meta name="robots" content="noindex, follow">
+		<{/if}>
+
+		<{if $meta_description}>
+			<meta name="description" content="<{$meta_description|escape}>">
+		<{/if}>
+
+		<{if $canonical}>
+			<link rel="canonical" type="text/html" href="<{$canonical|escape}>"/>
+		<{/if}>
+
+		<meta name="generator" content="Shoporama">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=PT+Serif&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="<{$theme_url}>/css/master.min.css">
+
+		<!-- Schema -->
+		<{include file="_partial.schema.html" }>
+
+		<{if $inc == "shipping.html"}>
+			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<{$settings.settings.google_maps_key}>"></script>
+		<{/if}>
+
+	</head>
+
+	<{assign var="bodyClass" value=""}>
+	<{if $inc == "address.html" || $inc == "basket.html" || $inc == "shipping.html" || $inc == "payment.html" || $inc == "approve.html" || $inc == "thanks.html"}>
+		<{assign var="bodyClass" value="checkout"}>
+	<{/if}>
+
+	<body class="<{$bodyClass}>">
+
+		<{include file="_partial.navigation.html"}>
+
+		<{$contents}>
+
+		<{include file="footer.html" }>
+
+		<{include file="_partial.tracking-bottom.html"}>
+
+		<script type="text/javascript" src="<{$theme_url}>/js/vendors.min.js"></script>
+		<script type="text/javascript" src="<{$theme_url}>/js/master.min.js"></script>
+
+	</body>
+
+</html>
+<{/strip}>

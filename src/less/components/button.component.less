@@ -1,0 +1,50 @@
+//Buttons
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid @color-primary;
+  padding: 14px 30px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-decoration: none;
+  font-style: normal;
+  overflow: hidden;
+  color: @color-white;
+  font-family: @font-primary;
+  background: @color-primary;
+  transition: border-radius 0.3s;
+
+  @media (min-width: @m-break) {
+    padding: 15px 40px;
+    font-size: 14px;
+  }
+
+  &:hover {
+    transform: translateY(1px);
+    background: darken(@color-primary, 10%);
+  }
+
+  &:active {
+    transform: translateY(2px);
+  }
+
+  &:disabled {
+    background: @color-gray;
+    border-color: @color-gray;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    font-size: @font-size;
+    padding: 10px 15px;
+    font-weight: 600;
+  }
+}
