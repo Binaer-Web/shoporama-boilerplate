@@ -11,18 +11,10 @@ const strip = require('gulp-strip-comments')
 const sftp = require('gulp-sftp')
 const gwatch = require('gulp-watch')
 const changed = require('gulp-changed')
+const through2 = require('through2')
 
-// Remeber to create the config.json file
-const config = require('./config.json');
-
-// This connection is used for all the SFTP transfers
-const conn = sftp({
-  host: config.host,
-  user: config.user,
-  pass: config.password,
-  port: config.port,
-  remotePath: config.theme,
-});
+// For file names and theme name
+const PROJECT_NAME = 'shoporama-boilerplate'
 
 const BABEL_CONFIG = {
   presets: [
@@ -44,12 +36,6 @@ const BABEL_CONFIG = {
       },
     ],
   ],
-}
-
-
-// Deploy command deploys everything from /dist, remember to build first.
-function deploy() {
-  return src('./dist/**/*').pipe(conn);
 }
 
 // Creates SVG sprite
@@ -100,9 +86,7 @@ function css() {
 
 // Transpiling and minification of vendor files
 function vendors() {
-  return src([
-      'src/vendors/**/*.js',
-    ])
+  return src(['src/vendors/**/*.js'])
     .pipe(sourcemaps.init())
     .pipe(babel(BABEL_CONFIG))
     .pipe(sourcemaps.write())
@@ -116,9 +100,7 @@ function vendors() {
 
 // Transpiling and minification of component javascript files
 function js() {
-  return src([
-      'src/js/**/*.js',
-    ])
+  return src(['src/js/**/*.js'])
     .pipe(sourcemaps.init())
     .pipe(babel(BABEL_CONFIG))
     .pipe(sourcemaps.write())
@@ -132,22 +114,20 @@ function js() {
 
 // Copying font files to dist
 function fonts() {
-  return src('src/fonts/**/*').pipe(dest('./dist/fonts'));
+  return src('src/fonts/**/*').pipe(dest('./dist/fonts'))
 }
 
 // Moves all changed files to dist folder
 function theme() {
   const destination = './dist'
   return src('src/theme/**/*')
-  .pipe(changed(destination))
-  .pipe(dest(destination));
+    .pipe(changed(destination))
+    .pipe(dest(destination))
 }
 
 // Optimizes images and copy to dist folder
 function img() {
-  return src('src/img/**/*')
-    .pipe(imagemin())
-    .pipe(dest('./dist/img'))
+  return src('src/img/**/*').pipe(imagemin()).pipe(dest('./dist/img'))
 }
 
 // Start command for development
@@ -160,9 +140,52 @@ function start() {
 }
 
 // Live command for deploying files on save
+const configs = require('./config.json')
+
+function getConnection(config) {
+  return sftp({
+    host: 'imali.pil.dk',
+    user: config.user,
+    pass: config.password,
+    port: 5000,
+    remotePath: PROJECT_NAME,
+  })
+}
+
+// Deploy, deploys to all sites
+function synchro(done) {
+  return through2.obj(
+    function (data, enc, cb) {
+      cb()
+    },
+    function (cb) {
+      cb()
+      done()
+    }
+  )
+}
+
+function deploy(done) {
+  var doneCounter = 0
+  function incDoneCounter() {
+    doneCounter += 1
+    if (doneCounter >= configs.length) {
+      done()
+    }
+  }
+
+  for (var i = 0; i < configs.length; ++i) {
+    src('./dist/**/*')
+      .pipe(getConnection(configs[i]))
+      .pipe(synchro(incDoneCounter))
+  }
+}
+
+// Live only runs on first configurated site
 function live() {
-    return gwatch('dist/**/*', { ignoreInitial: true })
-        .pipe(conn)
+  return gwatch('dist/**/*', { ignoreInitial: true }).pipe(
+    getConnection(configs[0])
+  )
 }
 
 exports.start = start
